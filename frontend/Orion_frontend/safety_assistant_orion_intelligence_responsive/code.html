@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ORION | Medicine Intelligence Assistant</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#8fcdff",
+                        "on-tertiary-fixed-variant": "#004f50",
+                        "outline-variant": "#c0c7d0",
+                        "background": "#f7f9fb",
+                        "on-background": "#191c1e",
+                        "primary-container": "#005e8c",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-tint": "#106492",
+                        "teal-glow": "rgba(0, 178, 178, 0.15)",
+                        "on-primary-fixed-variant": "#004b71",
+                        "on-surface": "#191c1e",
+                        "primary": "#004569",
+                        "primary-fixed-dim": "#8fcdff",
+                        "on-primary": "#ffffff",
+                        "outline": "#717880",
+                        "surface": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004f4f",
+                        "primary-fixed": "#cbe6ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-dim": "#d8dadc",
+                        "suspicious-amber": "#F59E0B",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#50dad9",
+                        "secondary-container": "#6ef3f3",
+                        "surface-container": "#eceef0",
+                        "inverse-surface": "#2d3133",
+                        "secondary-fixed": "#72f6f6",
+                        "on-surface-variant": "#40484f",
+                        "tertiary": "#00494a",
+                        "on-secondary-fixed": "#002020",
+                        "verification-green": "#10B981",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary-container": "#71e1e1",
+                        "deep-obsidian": "#0F172A",
+                        "surface-container-high": "#e6e8ea",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#67d8d8",
+                        "error": "#ba1a1a",
+                        "counterfeit-red": "#EF4444",
+                        "tertiary-container": "#006363",
+                        "tertiary-fixed": "#85f4f4",
+                        "on-primary-container": "#a4d5ff",
+                        "secondary": "#006a6a",
+                        "on-primary-fixed": "#001e30",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002020",
+                        "on-secondary-container": "#006e6e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "edge-margin-desktop": "80px",
+                        "card-padding": "40px",
+                        "section-gap": "160px",
+                        "gutter": "32px",
+                        "edge-margin-mobile": "20px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "mono-data": ["Geist"],
+                        "display-hero": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-caps": ["Geist"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.08em", "fontWeight": "600"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05), 0 40px 40px rgba(0, 0, 0, 0.03);
+        }
+        .chat-bubble-ai {
+            background: #ffffff;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 20px;
+            border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+        .chat-bubble-user {
+            background: #004569;
+            color: white;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-nav-glow {
+            box-shadow: 0 0 15px rgba(0, 178, 178, 0.2);
+        }
+        @keyframes scanline {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .scanner-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00B2B2, transparent);
+            position: absolute;
+            width: 100%;
+            animation: scanline 3s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- Mobile SideNavBar Overlay -->
+<div class="fixed inset-0 bg-black/50 z-[60] hidden md:hidden transition-opacity" id="mobile-sidebar"></div>
+<!-- SideNavBar -->
+<aside class="fixed md:sticky top-0 left-0 h-screen w-64 bg-surface-container-low border-r border-outline-variant shrink-0 z-50 -translate-x-full md:translate-x-0 transition-transform duration-300" id="sidebar-container">
+<div class="flex flex-col h-full py-8 px-4">
+<div class="mb-10 px-2 flex justify-between items-center">
+<div>
+<span class="font-headline-sm text-[24px] font-black text-primary tracking-tight">ORION Intel</span>
+<p class="text-[11px] font-label-caps text-on-surface-variant opacity-70 mt-1">Verified Status: Active</p>
+</div>
+<button class="md:hidden p-2 text-on-surface-variant" id="close-sidebar">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="public">public</span>
+<span class="font-label-caps">Risk Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-caps">Batch Track</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-bold transition-all active-nav-glow" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-label-caps">Safety Assistant</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-caps">Scan History</span>
+</a>
+</nav>
+<div class="mt-auto space-y-2 pt-6 border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-2 bg-error text-on-error py-3 rounded-xl font-bold text-sm mb-4 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]" data-icon="emergency">emergency</span>
+                    Emergency Alert
+                </button>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-caps">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="font-label-caps">Support</span>
+</a>
+<div class="flex items-center gap-3 px-2 mt-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant overflow-hidden border border-outline">
+<img class="w-full h-full object-cover" data-alt="Pharmacist Profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnbS5Wmb16BMACSZEbVXE7aOMGnmRjRUp4Il0L75CSeExSBm036e0SthwQ0RWxfwzLITHXg2DQEKcl60zD29wsLt6cAQvU_wrbAyyb1QgXE1ajvrsUXQAaoBsj5fTqMGCRLAWICyCPCDp0AzcJOgG_wMXTXxgHJnL6w7DFvmXEhrUu59DGXDRGkxXYcqDLv0QDa4aGtysCPeQyN1GAkRAmdKFZHrLVrJ322tNQHrucCgDIYNOBp9v-LELtTHtDEkiYZTBV6iQsye0M"/>
+</div>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Pharmacist Profile</p>
+<p class="text-[10px] text-on-surface-variant">ID: 4921</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col min-h-screen overflow-hidden relative">
+<!-- Top Navigation -->
+<header class="h-20 flex items-center justify-between px-4 md:px-8 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 sticky top-0 z-40">
+<div class="flex items-center gap-3 md:gap-4">
+<button class="md:hidden p-2 text-on-surface-variant hover:bg-surface-container rounded-lg" id="open-sidebar">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="text-lg md:text-headline-md font-bold text-primary truncate">Safety Assistant</h1>
+</div>
+<div class="flex items-center gap-2 md:gap-6">
+<!-- Language Toggle (Hide text on mobile) -->
+<div class="flex items-center gap-1 md:gap-2 bg-surface-container px-2 md:px-3 py-1.5 rounded-full border border-outline-variant/50">
+<span class="material-symbols-outlined text-[18px]" data-icon="language">language</span>
+<select class="bg-transparent border-none focus:ring-0 text-xs md:text-sm font-label-caps cursor-pointer p-0 max-w-[40px] md:max-w-none">
+<option>EN</option>
+<option>HI</option>
+<option>ES</option>
+</select>
+</div>
+<div class="flex items-center gap-2 md:gap-4">
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors hidden sm:block">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="bg-primary text-on-primary px-3 md:px-5 py-2 md:py-2.5 rounded-full font-label-caps text-xs md:text-sm flex items-center gap-2 hover:shadow-lg transition-all active:scale-95">
+<span class="material-symbols-outlined text-[18px]" data-icon="scan">scan</span>
+<span class="hidden xs:inline">Scan</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Dynamic Content Area -->
+<div class="flex-1 flex flex-col xl:flex-row overflow-hidden h-full">
+<!-- Conversational Interface -->
+<div class="flex-1 overflow-y-auto px-4 md:px-edge-margin-desktop py-8 md:py-12 scroll-smooth">
+<div class="max-w-4xl mx-auto space-y-8 md:space-y-12">
+<!-- Initial Assistant Message -->
+<div class="flex gap-3 md:gap-4 items-start group">
+<div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-white text-[16px] md:text-[20px]" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="chat-bubble-ai glass-card p-4 md:p-6 max-w-[90%] md:max-w-[85%] border border-primary/10">
+<p class="text-sm md:text-body-lg mb-4">Hello. I am the ORION AI Assistant. I have successfully analyzed the medicine labels you scanned. How can I help you ensure safe administration today?</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+<button class="text-left p-3 md:p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-teal-glow transition-all">
+<p class="text-[10px] md:font-label-caps text-primary mb-1 uppercase">Common Query</p>
+<p class="text-xs md:text-sm">"Are there any side effects for Lisinopril?"</p>
+</button>
+<button class="text-left p-3 md:p-4 rounded-xl border border-outline-variant hover:border-primary hover:bg-teal-glow transition-all">
+<p class="text-[10px] md:font-label-caps text-primary mb-1 uppercase">Interactions</p>
+<p class="text-xs md:text-sm">"Can I take this with Ibuprofen?"</p>
+</button>
+</div>
+</div>
+</div>
+<!-- User Message -->
+<div class="flex gap-3 md:gap-4 items-start justify-end">
+<div class="chat-bubble-user p-4 md:p-6 max-w-[90%] md:max-w-[85%] shadow-md">
+<p class="text-sm md:text-body-lg">Show me the safety analysis for my current medications: Metformin and Warfarin.</p>
+</div>
+<div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-[16px] md:text-[20px]" data-icon="person">person</span>
+</div>
+</div>
+<!-- AI Response -->
+<div class="flex gap-3 md:gap-4 items-start">
+<div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-white text-[16px] md:text-[20px]" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="flex flex-col gap-6 w-full">
+<!-- Safety Warnings Card -->
+<div class="glass-card p-5 md:p-8 rounded-[24px] border-l-4 border-counterfeit-red relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-4 md:mb-6">
+<span class="material-symbols-outlined text-counterfeit-red" data-icon="warning">warning</span>
+<h3 class="text-lg md:text-[24px] font-bold">Critical Safety Warnings</h3>
+</div>
+<div class="space-y-3 md:space-y-4">
+<div class="flex items-start gap-3 md:gap-4 p-3 md:p-4 bg-error-container/30 rounded-xl">
+<div class="w-2 h-2 rounded-full bg-error mt-2"></div>
+<div>
+<p class="font-bold text-sm md:text-base text-on-error-container">Bleeding Risk Escalation</p>
+<p class="text-xs md:text-sm text-on-error-container opacity-80">Metformin can slightly increase the effect of Warfarin. Monitor for unusual bruising.</p>
+</div>
+</div>
+<div class="flex items-start gap-3 md:gap-4 p-3 md:p-4 bg-suspicious-amber/10 rounded-xl">
+<div class="w-2 h-2 rounded-full bg-suspicious-amber mt-2"></div>
+<div>
+<p class="font-bold text-sm md:text-base text-on-background">Dietary Conflict: Vitamin K</p>
+<p class="text-xs md:text-sm text-on-surface-variant">Warfarin efficacy is highly sensitive to leafy green intake. Keep consumption consistent.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dosage & Missed Dose Module (Bento) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+<div class="glass-card p-4 md:p-6 rounded-[24px]">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="medication">medication</span>
+<h4 class="text-[10px] md:font-label-caps text-primary uppercase">Dosage &amp; Usage</h4>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-end pb-2 border-b border-outline-variant/30">
+<span class="text-xs md:text-sm text-on-surface-variant">Metformin</span>
+<span class="text-xs md:font-mono-data text-primary font-bold">500mg (2x)</span>
+</div>
+<div class="flex justify-between items-end pb-2 border-b border-outline-variant/30">
+<span class="text-xs md:text-sm text-on-surface-variant">Warfarin</span>
+<span class="text-xs md:font-mono-data text-primary font-bold">5mg (Eve)</span>
+</div>
+</div>
+</div>
+<div class="glass-card p-4 md:p-6 rounded-[24px] bg-secondary-container/10">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary text-xl" data-icon="history_toggle_off">history_toggle_off</span>
+<h4 class="text-[10px] md:font-label-caps text-secondary uppercase">Missed Dose</h4>
+</div>
+<p class="text-xs md:text-sm text-on-surface-variant mb-4">If you miss <span class="font-bold">Warfarin</span>: Take it same day. If next day, <span class="text-error font-bold underline uppercase">don't</span> double dose.</p>
+<button class="w-full py-2 px-4 rounded-lg bg-secondary text-on-secondary text-xs md:text-sm font-bold flex items-center justify-center gap-2">
+                                        Reminders
+                                        <span class="material-symbols-outlined text-[16px]">notifications_active</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar content stacked for mobile -->
+<div class="xl:hidden space-y-6 pt-6">
+<div class="glass-card p-6 rounded-[24px]">
+<h5 class="text-[10px] font-label-caps text-on-surface-variant uppercase mb-4">Active Analysis</h5>
+<div class="relative aspect-video sm:aspect-[2/1] bg-deep-obsidian rounded-2xl overflow-hidden flex items-center justify-center">
+<div class="scanner-line"></div>
+<img class="w-full h-full object-cover opacity-60 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY-AJH2B1BdgfrWHIWRE8d_0u_XlO6fU72SEzhUI--t2vexzCB-TeQmqlSNMgxxm9ORI-oPW-4oEEM0kroXrqdHtGoIzA5zkQ5nTk4sfgnpzWH86A4NEiT80pDZfRo7GCRXKmbte4E5a06BQnT6ieDi7pC2XfxxtXtydYwOnKM19MFyYXu-srV2zp42eYBCXUv-Z-6C3Mcxe5XTUM54yNv4mYyQdIeGrcG1eVS-MTUC3zhw4hXbn4cMeH99z4VGMj5wzv6wtrR8WBu"/>
+<div class="absolute bottom-4 left-4">
+<p class="font-mono-data text-verification-green text-[10px] animate-pulse">OCR SCANNING</p>
+<p class="text-white text-sm font-bold">Metformin 500mg</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="h-40"></div>
+</div>
+<!-- Chat Input (Floating - Adapts to width) -->
+<div class="fixed bottom-6 left-0 right-0 px-4 md:px-0 md:absolute md:bottom-10 md:left-1/2 md:-translate-x-1/2 w-full max-w-2xl z-40">
+<div class="glass-card p-1.5 md:p-2 rounded-2xl flex items-center gap-2 md:gap-3 shadow-2xl border border-primary/20">
+<button class="p-2 md:p-3 text-on-surface-variant hover:text-primary hidden xs:block">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-sm md:text-body-md py-2 md:py-3 placeholder:text-on-surface-variant/50" placeholder="Ask about medications..." type="text"/>
+<div class="flex gap-1 md:gap-2 pr-1 md:pr-2">
+<button class="p-2 md:p-3 text-on-surface-variant hover:text-primary">
+<span class="material-symbols-outlined text-xl">mic</span>
+</button>
+<button class="bg-primary text-on-primary p-2 md:p-3 rounded-xl shadow-lg hover:bg-primary-container transition-all active:scale-90">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Desktop Sidebar (Hidden on XL below) -->
+<aside class="hidden xl:flex flex-col w-80 bg-surface-container-lowest border-l border-outline-variant/30 p-8 shrink-0 overflow-y-auto">
+<div class="space-y-10">
+<div>
+<h5 class="font-label-caps text-on-surface-variant mb-6 uppercase">Active Analysis</h5>
+<div class="relative aspect-[3/4] bg-deep-obsidian rounded-3xl overflow-hidden shadow-inner flex items-center justify-center group">
+<div class="scanner-line"></div>
+<img class="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY-AJH2B1BdgfrWHIWRE8d_0u_XlO6fU72SEzhUI--t2vexzCB-TeQmqlSNMgxxm9ORI-oPW-4oEEM0kroXrqdHtGoIzA5zkQ5nTk4sfgnpzWH86A4NEiT80pDZfRo7GCRXKmbte4E5a06BQnT6ieDi7pC2XfxxtXtydYwOnKM19MFyYXu-srV2zp42eYBCXUv-Z-6C3Mcxe5XTUM54yNv4mYyQdIeGrcG1eVS-MTUC3zhw4hXbn4cMeH99z4VGMj5wzv6wtrR8WBu"/>
+<div class="absolute inset-0 bg-gradient-to-t from-deep-obsidian to-transparent"></div>
+<div class="absolute bottom-4 left-4 right-4">
+<p class="font-mono-data text-verification-green text-[12px] animate-pulse">OCR SCANNING: VERIFIED</p>
+<p class="text-white font-bold">Metformin 500mg</p>
+</div>
+</div>
+</div>
+<div class="space-y-6">
+<h5 class="font-label-caps text-on-surface-variant uppercase">Live Intelligence</h5>
+<div class="space-y-4">
+<div class="flex items-center gap-4 group cursor-help">
+<div class="w-1.5 h-1.5 rounded-full bg-verification-green"></div>
+<p class="text-sm font-medium group-hover:text-primary transition-colors">FDA Approval: 100%</p>
+</div>
+<div class="flex items-center gap-4 group cursor-help">
+<div class="w-1.5 h-1.5 rounded-full bg-verification-green"></div>
+<p class="text-sm font-medium group-hover:text-primary transition-colors">Authenticity Score: 9.9</p>
+</div>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/30">
+<div class="bg-primary/5 rounded-2xl p-6 border border-primary/10">
+<p class="text-xs text-primary font-bold mb-2 flex items-center gap-2 uppercase">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+                                AI Insight
+                            </p>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                "Based on your profile, you may experience mild drowsiness."
+                            </p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Simple Footer -->
+<footer class="fixed bottom-0 left-0 w-full md:pl-64 h-8 bg-surface-container-highest/10 pointer-events-none px-4 md:px-8 flex items-center justify-between z-30">
+<p class="text-[9px] font-label-caps text-on-surface-variant opacity-40 uppercase">© 2024 ORION Intel</p>
+<div class="flex gap-3">
+<span class="text-[9px] font-label-caps text-on-surface-variant opacity-40 uppercase hidden sm:inline">Privacy</span>
+<span class="text-[9px] font-label-caps text-on-surface-variant opacity-40 uppercase">Regulatory API</span>
+</div>
+</footer>
+<script>
+        // Sidebar Toggle logic for mobile
+        const openBtn = document.getElementById('open-sidebar');
+        const closeBtn = document.getElementById('close-sidebar');
+        const sidebar = document.getElementById('sidebar-container');
+        const overlay = document.getElementById('mobile-sidebar');
+
+        const toggleSidebar = (state) => {
+            if (state) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+            }
+        };
+
+        openBtn.addEventListener('click', () => toggleSidebar(true));
+        closeBtn.addEventListener('click', () => toggleSidebar(false));
+        overlay.addEventListener('click', () => toggleSidebar(false));
+
+        // Input focus styling
+        const chatInput = document.querySelector('input');
+        const inputContainer = chatInput.parentElement;
+        chatInput.addEventListener('focus', () => inputContainer.classList.add('ring-2', 'ring-primary', 'ring-opacity-20'));
+        chatInput.addEventListener('blur', () => inputContainer.classList.remove('ring-2', 'ring-primary', 'ring-opacity-20'));
+
+        // Staggered fade-in
+        document.addEventListener('DOMContentLoaded', () => {
+            const elements = document.querySelectorAll('.chat-bubble-ai, .chat-bubble-user, .glass-card');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ORION | Live Medicine Scanner</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;family=Inter:wght@400;500&amp;family=Geist:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-primary": "#8fcdff",
+                        "on-tertiary-fixed-variant": "#004f50",
+                        "outline-variant": "#c0c7d0",
+                        "background": "#f7f9fb",
+                        "on-background": "#191c1e",
+                        "primary-container": "#005e8c",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-highest": "#e0e3e5",
+                        "surface-tint": "#106492",
+                        "teal-glow": "rgba(0, 178, 178, 0.15)",
+                        "on-primary-fixed-variant": "#004b71",
+                        "on-surface": "#191c1e",
+                        "primary": "#004569",
+                        "primary-fixed-dim": "#8fcdff",
+                        "on-primary": "#ffffff",
+                        "outline": "#717880",
+                        "surface": "#f7f9fb",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#004f4f",
+                        "primary-fixed": "#cbe6ff",
+                        "inverse-on-surface": "#eff1f3",
+                        "surface-dim": "#d8dadc",
+                        "suspicious-amber": "#F59E0B",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#50dad9",
+                        "secondary-container": "#6ef3f3",
+                        "surface-container": "#eceef0",
+                        "inverse-surface": "#2d3133",
+                        "secondary-fixed": "#72f6f6",
+                        "on-surface-variant": "#40484f",
+                        "tertiary": "#00494a",
+                        "on-secondary-fixed": "#002020",
+                        "verification-green": "#10B981",
+                        "surface-bright": "#f7f9fb",
+                        "on-tertiary-container": "#71e1e1",
+                        "deep-obsidian": "#0F172A",
+                        "surface-container-high": "#e6e8ea",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#67d8d8",
+                        "error": "#ba1a1a",
+                        "counterfeit-red": "#EF4444",
+                        "tertiary-container": "#006363",
+                        "tertiary-fixed": "#85f4f4",
+                        "on-primary-container": "#a4d5ff",
+                        "secondary": "#006a6a",
+                        "on-primary-fixed": "#001e30",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002020",
+                        "on-secondary-container": "#006e6e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "edge-margin-desktop": "80px",
+                        "card-padding": "40px",
+                        "section-gap": "160px",
+                        "gutter": "32px",
+                        "edge-margin-mobile": "20px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "mono-data": ["Geist"],
+                        "display-hero-mobile": ["Plus Jakarta Sans"],
+                        "display-hero": ["Plus Jakarta Sans"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "label-caps": ["Geist"],
+                        "headline-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                        "mono-data": ["14px", {"lineHeight": "1.4", "fontWeight": "500"}],
+                        "display-hero-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "display-hero": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.08em", "fontWeight": "600"}],
+                        "headline-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05), 0 40px 40px rgba(0, 0, 0, 0.05);
+        }
+        .scanning-line {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00b2b2, transparent);
+            box-shadow: 0 0 15px #00b2b2;
+            animation: scan 3s ease-in-out infinite;
+        }
+        @keyframes scan {
+            0%, 100% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .text-flicker {
+            animation: flicker 2s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c0c7d0;
+            border-radius: 10px;
+        }
+        
+        /* Mobile Side Nav Toggle Logic */
+        #mobile-nav-toggle:checked ~ aside {
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col lg:flex-row overflow-x-hidden lg:overflow-hidden">
+<!-- MOBILE NAV TOGGLE -->
+<input class="hidden" id="mobile-nav-toggle" type="checkbox"/>
+<label class="lg:hidden fixed top-5 left-5 z-[60] bg-primary text-white p-2 rounded-lg shadow-lg cursor-pointer" for="mobile-nav-toggle">
+<span class="material-symbols-outlined block">menu</span>
+</label>
+<!-- SIDE NAV BAR -->
+<aside class="fixed inset-y-0 left-0 w-64 bg-surface-container-low dark:bg-inverse-surface shadow-xl py-8 px-4 z-50 transform -translate-x-full transition-transform lg:relative lg:translate-x-0 flex flex-col h-full">
+<div class="mb-10 px-2 flex justify-between items-center lg:block">
+<div>
+<h1 class="font-headline-sm text-[24px] font-black text-primary leading-tight">ORION Intel</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant opacity-70 mt-1">Verified Status: Active</p>
+</div>
+<label class="lg:hidden text-on-surface-variant cursor-pointer" for="mobile-nav-toggle">
+<span class="material-symbols-outlined">close</span>
+</label>
+</div>
+<nav class="flex-1 space-y-2 overflow-y-auto custom-scrollbar">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
+<span class="font-label-caps text-label-caps">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">public</span>
+<span class="font-label-caps text-label-caps">Risk Intelligence</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">inventory_2</span>
+<span class="font-label-caps text-label-caps">Batch Track</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant dark:text-surface-variant hover:bg-surface-variant transition-all rounded-xl group" href="#">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">chat_bubble</span>
+<span class="font-label-caps text-label-caps">Safety Assistant</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-bold lg:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-label-caps text-label-caps">Scan History</span>
+</a>
+</nav>
+<div class="mt-auto space-y-2 pt-6 border-t border-outline-variant/30">
+<button class="w-full py-3 px-4 bg-counterfeit-red/10 text-counterfeit-red rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-counterfeit-red/20 transition-colors">
+<span class="material-symbols-outlined text-[20px]">emergency</span>
+<span class="font-label-caps text-label-caps">Emergency Alert</span>
+</button>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-caps text-label-caps">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant transition-all rounded-xl" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-caps text-label-caps">Support</span>
+</a>
+<div class="flex items-center gap-3 mt-6 px-2">
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20 shrink-0">
+<img class="w-full h-full object-cover" data-alt="Close up professional portrait of a pharmaceutical professional wearing a white lab coat in a modern clinical setting with soft natural lighting and a high-end medical-tech aesthetic. The style is clean, corporate, and trustworthy." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_pvBkLp2NvylkQRBpEb3FByOaiGN5qPqPu4ZZORhxIV7ocombLW6DB4rYYsH6gDWkY-zU4aYAe4uv-uXu3J7vn_nrG8HbLji6Zay2A15cBXlbRc20hSmVSK8Ih6-QfioGlli-yyj3xqMsU-ZqQwhV_aqDYD2sWNwAmV3_1Om2Ju12bWcufiimCvb6CBUtbyXTsL3ezyOJ9Ik2QPuffWKnjN7jmTkis9xG3XwP2oo1CxsLYNQULa-ERj4znASr1_cDzxdtjbzGECPC"/>
+</div>
+<div class="overflow-hidden">
+<p class="text-[12px] font-bold truncate">Dr. Aris Thorne</p>
+<p class="text-[10px] text-on-surface-variant truncate">Global Pharmacist ID: 9920</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- MAIN CONTENT AREA -->
+<main class="flex-1 flex flex-col relative min-h-screen">
+<!-- HEADER TOP BAR -->
+<header class="h-20 flex items-center justify-between px-6 lg:px-edge-margin-desktop bg-surface/80 backdrop-blur-md z-40 border-b border-outline-variant/20 sticky top-0">
+<div class="flex flex-col ml-10 lg:ml-0">
+<h2 class="font-headline-md text-[20px] lg:text-headline-md font-bold text-primary truncate max-w-[150px] sm:max-w-none">Live Scan Workspace</h2>
+<p class="text-[10px] lg:text-label-caps font-label-caps text-on-surface-variant uppercase tracking-[0.1em] lg:tracking-[0.15em]">Neural Engine v4.28 • Scanning Active</p>
+</div>
+<div class="flex items-center gap-2 lg:gap-4">
+<button class="hidden sm:flex items-center gap-2 px-3 lg:px-5 py-2.5 border border-outline-variant rounded-xl text-on-surface-variant hover:bg-surface-variant transition-all">
+<span class="material-symbols-outlined text-[20px]">qr_code_scanner</span>
+<span class="font-label-caps text-label-caps hidden md:inline">Enter Batch</span>
+</button>
+<button class="flex items-center gap-2 px-4 lg:px-6 py-2.5 bg-primary text-white rounded-xl font-bold shadow-md hover:scale-[1.02] active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+<span class="font-label-caps text-label-caps hidden sm:inline">Open Camera</span>
+</button>
+</div>
+</header>
+<div class="flex-1 flex flex-col xl:flex-row p-4 lg:p-10 gap-6 lg:gap-10 overflow-x-hidden">
+<!-- CENTER: SCAN ZONE -->
+<div class="flex-1 flex flex-col gap-6 min-w-0 h-[400px] lg:h-auto">
+<div class="flex-1 glass-card rounded-[24px] lg:rounded-[32px] relative overflow-hidden flex flex-col items-center justify-center border-2 border-dashed border-primary/20 bg-primary/5 hover:bg-primary/[0.08] transition-colors cursor-pointer group min-h-[300px]">
+<!-- Scanning Lines Container -->
+<div class="absolute inset-0 z-10 pointer-events-none overflow-hidden rounded-[24px] lg:rounded-[32px]">
+<div class="scanning-line absolute w-full left-0 opacity-0"></div>
+<div class="scanning-line absolute w-full left-0 opacity-0" style="animation-delay: 1.5s;"></div>
+</div>
+<!-- Placeholder Image for Drag-and-Drop -->
+<div class="z-20 flex flex-col items-center text-center space-y-4 lg:space-y-6 px-6">
+<div class="w-16 h-16 lg:w-24 lg:h-24 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[32px] lg:text-[48px]">upload_file</span>
+</div>
+<div>
+<h3 class="font-headline-md text-[20px] lg:text-headline-md text-on-surface font-bold">Drop Package Image</h3>
+<p class="text-body-md lg:text-body-lg text-on-surface-variant mt-1 lg:mt-2">AI-driven analysis will begin instantly</p>
+</div>
+<div class="flex gap-2 lg:gap-3">
+<span class="px-2 py-1 bg-surface-container rounded-lg font-mono-data text-[10px] lg:text-label-caps">JPG</span>
+<span class="px-2 py-1 bg-surface-container rounded-lg font-mono-data text-[10px] lg:text-label-caps">PNG</span>
+<span class="px-2 py-1 bg-surface-container rounded-lg font-mono-data text-[10px] lg:text-label-caps">HEIC</span>
+</div>
+</div>
+<!-- Active Image Placeholder -->
+<div class="absolute inset-0 z-0 opacity-0 transition-opacity duration-1000" id="active-scan-img">
+<img class="w-full h-full object-cover" data-alt="Pharmaceutical product box." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHfeRTy6ofSY81pGOT0zMPNLubY4I72mGGEfYywWpPRQNWMPMfWxqiQge5hxaxkbKPevCcag5DMJ0pPqE2mzsedwcf7gunMdrziGlWHYvZ4NEY2KRef991FgU4vgGjNmLXdPfLBdy8bNRRt8MPPqKyMd6j22WXGgssQ3r8HCZgYxM2PF6EPlkYzdes31WbwCatF6PDE-SmU9ZPngNaCiRThPKM17NVPwIxJo-MGYlAY5QejVUs4Di5PR4P0G0jrPzOxopU0p7aa5A0"/>
+</div>
+</div>
+<!-- Footer Status Bar -->
+<div class="h-auto py-3 lg:h-12 glass-card rounded-2xl flex flex-wrap items-center px-4 lg:px-6 gap-3 lg:gap-6">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-verification-green animate-pulse"></div>
+<span class="font-mono-data text-[10px] lg:text-label-caps text-on-surface">Neural Engine: Link Ready</span>
+</div>
+<div class="hidden sm:block h-4 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] lg:text-[18px] text-on-surface-variant">memory</span>
+<span class="font-mono-data text-[10px] lg:text-label-caps text-on-surface">Latency: 14ms</span>
+</div>
+</div>
+</div>
+<!-- RIGHT SIDEBAR: OCR & HISTORY -->
+<div class="w-full xl:w-96 flex flex-col gap-6 min-h-0">
+<!-- OCR DATA CARD -->
+<div class="glass-card rounded-[24px] p-5 lg:p-6 flex flex-col gap-4 border-l-4 border-l-primary relative overflow-hidden shrink-0">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-symbols-outlined text-primary/30 animate-spin" style="animation-duration: 4s;">sync</span>
+</div>
+<h4 class="font-label-caps text-label-caps text-primary tracking-widest">REAL-TIME EXTRACTION</h4>
+<div class="space-y-4">
+<div class="group">
+<label class="font-label-caps text-[10px] text-on-surface-variant mb-1 block">PRODUCT_NAME</label>
+<div class="font-mono-data text-body-md text-on-surface p-3 bg-primary/5 rounded-lg flex justify-between items-center group-hover:bg-primary/10 transition-colors">
+<span class="text-flicker truncate mr-2">Amoxicillin 500mg</span>
+<span class="material-symbols-outlined text-[16px] text-verification-green shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="group">
+<label class="font-label-caps text-[10px] text-on-surface-variant mb-1 block">BATCH_NUMBER</label>
+<div class="font-mono-data text-body-md text-on-surface p-3 bg-primary/5 rounded-lg flex justify-between items-center group-hover:bg-primary/10 transition-colors">
+<span class="text-flicker truncate mr-2">B-X9920-LPR</span>
+<span class="material-symbols-outlined text-[16px] text-verification-green shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="group">
+<label class="font-label-caps text-[10px] text-on-surface-variant mb-1 block">EXPIRY_DATE</label>
+<div class="font-mono-data text-body-md text-on-surface p-3 bg-primary/5 rounded-lg flex justify-between items-center group-hover:bg-primary/10 transition-colors">
+<span class="text-flicker truncate mr-2">OCT 2026</span>
+<span class="material-symbols-outlined text-[16px] text-verification-green shrink-0" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+</div>
+<button class="w-full mt-2 py-4 bg-primary-container text-on-primary-container font-bold rounded-xl flex items-center justify-center gap-2 hover:scale-[0.98] transition-transform active:scale-95 touch-manipulation">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="font-label-caps text-label-caps">AUTHENTICATE BATCH</span>
+</button>
+</div>
+<!-- SCAN HISTORY -->
+<div class="glass-card rounded-[24px] p-5 lg:p-6 flex-1 flex flex-col gap-4 min-h-[300px] lg:min-h-0">
+<div class="flex items-center justify-between">
+<h4 class="font-label-caps text-label-caps text-on-surface-variant tracking-widest">RECENT SCAN LOG</h4>
+<span class="text-[10px] font-bold text-primary cursor-pointer hover:underline">VIEW ALL</span>
+</div>
+<div class="flex-1 overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+<!-- History Items -->
+<div class="p-3 bg-white/40 border border-white/60 rounded-xl hover:bg-white/60 transition-all cursor-pointer group touch-manipulation">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 bg-verification-green/10 text-verification-green rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="min-w-0">
+<p class="font-bold text-[14px] text-on-surface truncate">Lipitor 20mg</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant">Batch: #88210 - Verified</p>
+<p class="text-[10px] text-outline mt-1 italic">2 mins ago</p>
+</div>
+</div>
+</div>
+<div class="p-3 bg-white/40 border border-white/60 rounded-xl hover:bg-white/60 transition-all cursor-pointer group touch-manipulation">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 bg-suspicious-amber/10 text-suspicious-amber rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">report_problem</span>
+</div>
+<div class="min-w-0">
+<p class="font-bold text-[14px] text-on-surface truncate">Ventolin Inhaler</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant">Batch: #UNKWN - Flagged</p>
+<p class="text-[10px] text-outline mt-1 italic">14 mins ago</p>
+</div>
+</div>
+</div>
+<div class="p-3 bg-white/40 border border-white/60 rounded-xl hover:bg-white/60 transition-all cursor-pointer group touch-manipulation">
+<div class="flex items-start gap-3">
+<div class="w-10 h-10 bg-verification-green/10 text-verification-green rounded-lg flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="min-w-0">
+<p class="font-bold text-[14px] text-on-surface truncate">Metformin 850mg</p>
+<p class="font-mono-data text-[11px] text-on-surface-variant">Batch: #YT-992 - Verified</p>
+<p class="text-[10px] text-outline mt-1 italic">1 hour ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for Drag and Drop Simulation
+        const dropZone = document.querySelector('.glass-card.group');
+        const activeScanImg = document.getElementById('active-scan-img');
+        
+        dropZone.addEventListener('click', () => {
+            // Toggle "Scanning" simulation
+            activeScanImg.style.opacity = activeScanImg.style.opacity === '1' ? '0' : '1';
+        });
+
+        // Add some random "life" to the OCR text flicker
+        const flickers = document.querySelectorAll('.text-flicker');
+        flickers.forEach(f => {
+            f.style.animationDelay = `${Math.random() * 2}s`;
+        });
+
+        // Auto-close mobile nav on link click
+        const navLinks = document.querySelectorAll('aside nav a');
+        const navToggle = document.getElementById('mobile-nav-toggle');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                navToggle.checked = false;
+            });
+        });
+    </script>
+</body></html>
