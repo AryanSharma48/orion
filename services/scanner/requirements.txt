@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+python-multipart
+easyocr
+opencv-python-headless
+open-clip-torch
+torch
+torchvision
+scikit-image
+chromadb
+google-generativeai
+httpx
+python-dotenv
+numpy
+Pillow
