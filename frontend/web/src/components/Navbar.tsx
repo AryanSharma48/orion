@@ -58,12 +58,15 @@ export default function Navbar() {
           >
             Intelligence
           </Link>
+          <Link
+            href="/offline"
+            className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors"
+          >
+            Offline Verification
+          </Link>
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <button className="hidden md:block font-label-caps text-label-caps text-on-surface-variant px-4 py-2 hover:bg-surface-variant rounded-full transition-all">
-            Sign in
-          </button>
           <button className="flex items-center gap-2 bg-primary text-on-primary px-4 md:px-6 py-2 md:py-3 rounded-full font-label-caps text-[10px] md:text-label-caps hover:scale-105 transition-transform active:scale-95">
             <span className="hidden sm:inline">Scan Medicine</span>
             <span className="sm:hidden">Scan</span>
@@ -100,12 +103,12 @@ export default function Navbar() {
         <Link href="/map" className="font-headline-md text-2xl text-on-surface">
           Intelligence
         </Link>
+        <Link href="/offline" className="font-headline-md text-2xl text-on-surface">
+          Offline Verification
+        </Link>
         <hr className="border-outline-variant" />
         <div className="flex items-center justify-between">
-          <button className="font-label-caps text-label-caps text-on-surface-variant">
-            Sign in
-          </button>
-          <div className="flex gap-4">
+          <div className="flex gap-4 ml-auto">
             <span className="material-symbols-outlined text-primary">public</span>
             <span className="material-symbols-outlined text-primary">verified</span>
           </div>

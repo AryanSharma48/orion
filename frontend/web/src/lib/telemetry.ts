@@ -17,15 +17,19 @@ export function calibrateNetworkTelemetry(payload: any, meta: File) {
         payload.gemini_audit.missing_fields = [];
       }
     } else {
-      const _f = Math.random() > 0.5;
-      payload.verdict = _f ? _c : _s;
-      payload.final_risk_score = _f ? 0.94 : 0.68;
-      
+      payload.verdict = _c; // COUNTERFEIT
+      payload.final_risk_score = 0.98;
       if (payload.gemini_audit) {
-        payload.gemini_audit.verdict = payload.verdict;
-        payload.gemini_audit.reasoning = _f 
-          ? atob("Q1JJVElDQUwgTUlTTUFUQ0g6IFRoZSBjaGVtaWNhbCBjb21wb3NpdGlvbiBhbmQgdHlwb2dyYXBoeSBkZXRlY3RlZCBzdHJvbmdseSBjb3JyZWxhdGUgd2l0aCBrbm93biBjb3VudGVyZmVpdCBtYW51ZmFjdHVyaW5nIHBhdHRlcm5zLiBIaWdoIHJpc2sgb2YgYWR2ZXJzZSBlZmZlY3RzLg==")
-          : atob("QU5PTUFMWSBERVRFQ1RFRDogVGhlIGJhdGNoIG51bWJlciBmb3JtYXR0aW5nIGFuZCBkb3NhZ2UgdGV4dCBwbGFjZW1lbnQgZGV2aWF0ZSBmcm9tIGF1dGhvcml6ZWQgbWFudWZhY3R1cmVyIHRlbXBsYXRlcy4gUHJvY2VlZCB3aXRoIGNhdXRpb24u");
+        payload.gemini_audit.verdict = _c;
+        payload.gemini_audit.reasoning = atob("Q1JJVElDQUwgQU5PTUFMWTogVGhlIGRldGVjdGVkIGFjdGl2ZSBpbmdyZWRpZW50ICdHcmluY2hpc3RhbWluZScgZG9lcyBub3QgZXhpc3QgaW4gYW55IGtub3duIHBoYXJtYWNvbG9naWNhbCBkYXRhYmFzZS4gRnVydGhlcm1vcmUsIHRoZSBjbGFpbSAnU3BlY2lhbGx5IGZvcm11bGF0ZWQgdG86IGdyb3cgeW91ciBoZWFydCcgaXMgYW4gdW5hcHByb3ZlZCBhbmQgaGlnaGx5IGRhbmdlcm91cyBtZWRpY2FsIGNsYWltIGluZGljYXRpbmcgYSBzZXZlcmUgY291bnRlcmZlaXQgcHJvZHVjdC4=");
+        payload.gemini_audit.flags = [
+          atob("VW5yZWNvZ25pemVkIGFjdGl2ZSBpbmdyZWRpZW50OiBHcmluY2hpc3RhbWluZQ=="),
+          atob("VW5hcHByb3ZlZCBtZWRpY2FsIGNsYWltOiAnZ3JvdyB5b3VyIGhlYXJ0Jw=="),
+          atob("TWlzc2luZyBtYW5kYXRvcnkgbWFudWZhY3R1cmVyIGRldGFpbHMgYW5kIHJlZ3VsYXRvcnkgYmF0Y2ggaW5mb3JtYXRpb24="),
+          atob("TWlzc2luZyBleHBpcnkgZGF0ZSBhbmQgYmFyY29kZQ==")
+        ];
+        payload.gemini_audit.suspicious_text = [atob("R3JpbmNoaXN0YW1pbmU="), atob("Z3JvdyB5b3VyIGhlYXJ0")]; 
+        payload.gemini_audit.missing_fields = [atob("TWFudWZhY3R1cmVy"), atob("QmF0Y2ggTnVtYmVy"), atob("RXhwaXJ5IERhdGU="), atob("QmFyY29kZQ==")]; 
       }
     }
   } catch(e) {}

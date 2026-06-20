@@ -37,10 +37,6 @@ export default function Home() {
                     arrow_forward
                   </span>
                 </button>
-                <button className="flex items-center justify-center gap-3 bg-surface-container-lowest border border-outline-variant text-on-surface px-8 py-4 md:py-5 rounded-xl font-label-caps text-label-caps hover:bg-surface-container-low transition-all hover:border-primary hover:text-primary">
-                  <span className="material-symbols-outlined">play_circle</span>
-                  Watch Demo
-                </button>
               </div>
             </div>
             <div className="lg:col-span-6 relative flex justify-center order-1 lg:order-2">
