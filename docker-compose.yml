@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  chromadb:
+    image: chromadb/chroma:latest
+    ports:
+      - "8100:8000"
+    volumes:
+      - chroma_data:/chroma/chroma
+
+  scanner:
+    build: ./services/scanner
+    ports:
+      - "8000:8000"
+    env_file: .env
+    depends_on:
+      - chromadb
+    volumes:
+      - ./data/reference-packaging:/app/reference-packaging:ro
+
+  anomaly-engine:
+    build: ./services/anomaly-engine
+    ports:
+      - "8001:8001"
+    env_file: .env
+    depends_on:
+      - redis
+
+  offline-verifier:
+    build: ./services/offline-verifier
+    ports:
+      - "8002:8002"
+    env_file: .env
+
+volumes:
+  redis_data:
+  chroma_data:

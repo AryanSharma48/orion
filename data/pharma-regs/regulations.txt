@@ -1,0 +1,13 @@
+WHO Good Manufacturing Practice (GMP) states that all pharmaceutical labeling must contain the active pharmaceutical ingredient (API), manufacturer name, and complete registered address. The printing must be sharp, legible, and indelible to prevent tampering during transport.
+---CHUNK---
+According to ICH Q6A specifications, dosage formats must be explicitly stated (e.g., tablet, capsule, suspension). Implausible combinations such as "liquid tablets" or inconsistent dosage metrics (e.g., "500 ml capsule") are indicative of counterfeit manufacturing.
+---CHUNK---
+FDA 21 CFR Part 201 mandates that the expiry date must be formatted unambiguously. Acceptable formats include MM/YYYY or DD/MM/YYYY. Formats that omit the year or use non-standard month abbreviations are strictly prohibited on legitimate packaging.
+---CHUNK---
+Standard batch numbers (also known as lot numbers) for major manufacturers are strictly alphanumeric and typically 6 to 10 characters in length. Any batch number containing special characters (e.g., @, #, $, %) violates standard serialization protocols.
+---CHUNK---
+Storage conditions must be clearly printed on the label, typically stating "Store below 25°C" or "Keep in a cool, dry place." Absence of proper storage warnings on temperature-sensitive medications like antibiotics or vaccines is a major regulatory violation.
+---CHUNK---
+Active ingredients must be declared using their International Nonproprietary Name (INN). Common misspellings of chemical compounds (e.g., "Amoxillin" instead of "Amoxicillin", or "Paracetemol" instead of "Paracetamol") are strong indicators of illicit manufacturing.
+---CHUNK---
+The manufacturer's license number must be visible and prefixed correctly according to regional laws (e.g., "Mfg. Lic. No."). A medicine package without a traceable license number is considered misbranded and potentially counterfeit.

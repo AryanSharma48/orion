@@ -43,17 +43,17 @@ orion/
 
 ### 1. Project Initialization & Shared Code
 - [x] Create folder structure.
-- [ ] Create `shared/types/index.ts`.
-- [ ] Create `shared/crypto/generate_keys.js`.
-- [ ] Create `.env.example`.
-- [ ] Create `docker-compose.yml`.
+- [x] Create `shared/types/index.ts`.
+- [x] Create `shared/crypto/generate_keys.js`.
+- [x] Create `.env.example`.
+- [x] Create `docker-compose.yml`.
 - **Agent**: `backend-specialist`
 - **Verification**: Files exist and structure matches specification.
 
 ### 2. Data & Seed Scripts
-- [ ] Create mock data: `dispatch_records.json` and `regulations.txt`.
-- [ ] Create Python script `scripts/seed_chroma.py`.
-- [ ] Create Node script `scripts/seed_batches.js`.
+- [x] Create mock data: `dispatch_records.json` and `regulations.txt`.
+- [x] Create Python script `scripts/seed_chroma.py`.
+- [x] Create Node script `scripts/seed_batches.js`.
 - **Agent**: `backend-specialist`
 - **Verification**: Scripts run successfully when DBs are up.
 
