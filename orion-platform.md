@@ -58,28 +58,28 @@ orion/
 - **Verification**: Scripts run successfully when DBs are up.
 
 ### 3. Scanner Service (Python)
-- [ ] Setup FastAPI `main.py` and `routes/scan.py`.
-- [ ] Implement pipelines: `preprocessing.py`, `ocr.py`, `cv_analysis.py`, `clip_analysis.py`, `rag.py`, `gemini_audit.py`.
-- [ ] Setup `Dockerfile` and `requirements.txt`.
+- [x] Setup FastAPI `main.py` and `routes/scan.py`.
+- [x] Implement pipelines: `preprocessing.py`, `ocr.py`, `cv_analysis.py`, `clip_analysis.py`, `rag.py`, `gemini_audit.py`.
+- [x] Setup `Dockerfile` and `requirements.txt`.
 - **Agent**: `backend-specialist`
 - **Verification**: Builds and starts, `/health` returns ok.
 
 ### 4. Anomaly Engine (Node.js)
-- [ ] Setup Express server `index.ts`.
-- [ ] Implement `velocityCheck.ts`, `volumeCheck.ts`, `dispatchCheck.ts`.
-- [ ] Setup `Dockerfile` and `package.json`.
+- [x] Setup Express server `index.ts`.
+- [x] Implement `velocityCheck.ts`, `volumeCheck.ts`, `dispatchCheck.ts`.
+- [x] Setup `Dockerfile` and `package.json`.
 - **Agent**: `backend-specialist`
 - **Verification**: Builds and starts, connects to Redis.
 
 ### 5. Offline Verifier (Node.js)
-- [ ] Setup Express server and `crypto/ed25519.ts`.
-- [ ] Implement verification and reporting routes.
-- [ ] Setup `Dockerfile` and `package.json`.
+- [x] Setup Express server and `crypto/ed25519.ts`.
+- [x] Implement verification and reporting routes.
+- [x] Setup `Dockerfile` and `package.json`.
 - **Agent**: `backend-specialist`
 - **Verification**: Builds and starts, offline signatures validate correctly.
 
 ### 6. Documentation
-- [ ] Create comprehensive `README.md` with ASCII architecture and tech pitch.
+- [x] Create comprehensive `README.md` with ASCII architecture and tech pitch.
 - **Agent**: `backend-specialist`
 
 ## Phase X: Verification
