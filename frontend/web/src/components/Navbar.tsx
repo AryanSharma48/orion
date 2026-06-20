@@ -39,14 +39,9 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
+
           <Link
-            href="#"
-            className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors"
-          >
-            How it works
-          </Link>
-          <Link
-            href="#"
+            href="/scanner"
             className="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors"
           >
             Platform
@@ -95,10 +90,8 @@ export default function Navbar() {
             : "hidden opacity-0 -translate-y-5"
         }`}
       >
-        <Link href="#" className="font-headline-md text-2xl text-on-surface">
-          How it works
-        </Link>
-        <Link href="#" className="font-headline-md text-2xl text-on-surface">
+
+        <Link href="/scanner" className="font-headline-md text-2xl text-on-surface">
           Platform
         </Link>
         <Link href="/scanner" className="font-headline-md text-2xl text-on-surface">

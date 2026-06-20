@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Sidebar from "@/components/Sidebar";
 
 export default function VerificationReport() {
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [showContent, setShowContent] = useState(false);
 
   useEffect(() => {
@@ -23,137 +23,12 @@ export default function VerificationReport() {
             transition: stroke-dashoffset 1s ease-out;
         }
       `}</style>
-      <div className="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-x-hidden min-h-screen flex flex-col md:flex-row">
-        {/* Mobile Top Nav */}
-        <header className="md:hidden flex items-center justify-between p-4 bg-surface-container-low border-b border-outline-variant/30 sticky top-0 z-[60]">
-          <span className="font-headline-sm text-lg font-black text-primary">
-            ORION Intel
-          </span>
-          <button className="p-2" onClick={() => setMobileNavOpen(true)}>
-            <span className="material-symbols-outlined">menu</span>
-          </button>
-        </header>
-
-        {/* Mobile Menu Overlay */}
-        {mobileNavOpen && (
-          <div className="fixed inset-0 z-[100] bg-surface-container-low p-6 flex flex-col md:hidden">
-            <div className="flex justify-between items-center mb-10">
-              <span className="font-headline-sm text-xl font-black text-primary">
-                ORION Intel
-              </span>
-              <button className="p-2" onClick={() => setMobileNavOpen(false)}>
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            <nav className="space-y-4">
-              <Link
-                href="/"
-                className="flex items-center gap-4 text-on-surface-variant font-bold text-lg"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/map"
-                className="flex items-center gap-4 text-on-surface-variant font-bold text-lg"
-              >
-                Risk Intelligence
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-4 text-on-surface-variant font-bold text-lg"
-              >
-                Batch Track
-              </Link>
-              <Link
-                href="/assistant"
-                className="flex items-center gap-4 text-on-surface-variant font-bold text-lg"
-              >
-                Safety Assistant
-              </Link>
-            </nav>
-            <div className="mt-auto border-t border-outline-variant/30 pt-6">
-              <button className="w-full bg-counterfeit-red text-white py-4 rounded-xl font-bold mb-4">
-                Emergency Alert
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* SideNavBar (Desktop Only) */}
-        <aside className="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low shadow-xl z-50 py-8 px-4">
-          <div className="mb-10 px-2">
-            <span className="font-headline-sm text-headline-sm font-black text-primary">
-              ORION Intel
-            </span>
-            <p className="text-[10px] uppercase tracking-widest text-on-surface-variant opacity-70 mt-1">
-              Verified Status: Active
-            </p>
-          </div>
-          <nav className="flex-1 space-y-2">
-            <Link
-              href="/"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow transition-all rounded-xl"
-            >
-              <span className="material-symbols-outlined">dashboard</span>
-              <span className="font-label-caps text-label-caps">Dashboard</span>
-            </Link>
-            <Link
-              href="/map"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow transition-all rounded-xl"
-            >
-              <span className="material-symbols-outlined">public</span>
-              <span className="font-label-caps text-label-caps">
-                Risk Intelligence
-              </span>
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow transition-all rounded-xl"
-            >
-              <span className="material-symbols-outlined">inventory_2</span>
-              <span className="font-label-caps text-label-caps">Batch Track</span>
-            </Link>
-            <Link
-              href="/assistant"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow transition-all rounded-xl"
-            >
-              <span className="material-symbols-outlined">chat_bubble</span>
-              <span className="font-label-caps text-label-caps">
-                Safety Assistant
-              </span>
-            </Link>
-            <Link
-              href="/scanner"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow transition-all rounded-xl"
-            >
-              <span className="material-symbols-outlined">history</span>
-              <span className="font-label-caps text-label-caps">Scan History</span>
-            </Link>
-          </nav>
-          <div className="mt-auto space-y-2 pt-6 border-t border-outline-variant/30">
-            <button className="w-full bg-counterfeit-red text-white py-3 rounded-xl font-bold text-sm mb-4 active:scale-95 transition-transform">
-              Emergency Alert
-            </button>
-            <Link
-              href="#"
-              className="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg"
-            >
-              <span className="material-symbols-outlined">settings</span>
-              <span className="font-label-caps text-label-caps">Settings</span>
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:bg-surface-variant transition-all rounded-lg"
-            >
-              <span className="material-symbols-outlined">help</span>
-              <span className="font-label-caps text-label-caps">Support</span>
-            </Link>
-          </div>
-        </aside>
+      <div className="flex-1 flex flex-col lg:flex-row w-full min-h-screen relative bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+        <Sidebar theme="light" />
 
         {/* Main Content Area */}
         <main
-          className={`flex-1 md:ml-64 p-4 sm:p-6 md:p-10 lg:p-12 max-w-[1440px] mx-auto w-full transition-all duration-700 ${
+          className={`flex-1 p-4 sm:p-6 md:p-10 lg:p-12 max-w-[1440px] mx-auto w-full transition-all duration-700 ${
             showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
           }`}
         >

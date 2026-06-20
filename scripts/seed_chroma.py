@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-host = os.getenv("CHROMA_HOST", "localhost")
-port = os.getenv("CHROMA_PORT", "8000")
+host = "localhost"
+port = "8100"
 
 print(f"Connecting to ChromaDB at {host}:{port}...")
 client = chromadb.HttpClient(host=host, port=port)

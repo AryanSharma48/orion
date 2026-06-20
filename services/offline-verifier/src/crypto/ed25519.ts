@@ -14,7 +14,7 @@ function serializeDeterministic(payload: BatchPayload): Uint8Array {
 export async function signPayload(payload: BatchPayload, privateKeyHex: string): Promise<string> {
     const bytes = serializeDeterministic(payload);
     const signature = await ed.signAsync(bytes, privateKeyHex);
-    return ed.utils.bytesToHex(signature);
+    return Buffer.from(signature).toString('hex');
 }
 
 export async function verifySignature(payload: BatchPayload, signatureHex: string, publicKeyHex: string): Promise<boolean> {

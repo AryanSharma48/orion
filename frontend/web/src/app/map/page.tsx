@@ -3,17 +3,76 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Map, Marker, Overlay } from "pigeon-maps";
+import Sidebar from "@/components/Sidebar";
 
-export default function RiskIntelligenceMap() {
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+// Types for Riskmap API response
+interface AnomalyFlag {
+  id: string;
+  type: string;
+  description: string;
+  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  timestamp: string;
+  metadata?: any;
+}
+
+interface GeoJsonFeature {
+  type: "Feature";
+  geometry: {
+    type: "Point";
+    coordinates: [number, number]; // [lng, lat]
+  };
+  properties: {
+    intensity: number;
+    scan_count: number;
+    flags: AnomalyFlag[];
+  };
+}
+
+interface RiskmapResponse {
+  type: "FeatureCollection";
+  features: GeoJsonFeature[];
+  generated_at: string;
+  total_flags: number;
+}
+
+export default function MapWorkspace() {
   const [alertsOpen, setAlertsOpen] = useState(false);
+  
+  // Real map state
+  const [geoData, setGeoData] = useState<RiskmapResponse | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<GeoJsonFeature | null>(null);
+  const [center, setCenter] = useState<[number, number]>([20.5937, 78.9629]); // India
+  const [zoom, setZoom] = useState(4);
+
   const [scanCount, setScanCount] = useState(142892);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    // Fake global count ticking
+    const countInterval = setInterval(() => {
       setScanCount((prev) => prev + Math.floor(Math.random() * 3));
     }, 3000);
-    return () => clearInterval(interval);
+
+    // Fetch real live backend data
+    const fetchRiskmap = async () => {
+      try {
+        const res = await fetch("http://localhost:8001/riskmap");
+        if (res.ok) {
+          const data: RiskmapResponse = await res.json();
+          setGeoData(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch riskmap:", err);
+      }
+    };
+
+    fetchRiskmap();
+    const mapInterval = setInterval(fetchRiskmap, 5000);
+
+    return () => {
+      clearInterval(countInterval);
+      clearInterval(mapInterval);
+    };
   }, []);
 
   return (
@@ -61,128 +120,116 @@ export default function RiskIntelligenceMap() {
         .animate-scroll:hover {
           animation-play-state: paused;
         }
+        
+        .map-theme .glass-card {
+          background: rgba(15, 23, 42, 0.7);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .dark-map-container > div {
+          background-color: #0F172A !important;
+        }
       `}</style>
       <div className="map-theme bg-background text-on-background font-body-md overflow-hidden flex h-screen w-full relative">
-        {/* Mobile Navigation Toggle */}
-        <button
-          className="lg:hidden absolute top-4 left-4 z-[60] bg-surface-container-high p-2 rounded-lg text-white"
-          onClick={() => setMobileNavOpen(!mobileNavOpen)}
-        >
-          <span className="material-symbols-outlined">menu</span>
-        </button>
-
-        {/* SideNavBar */}
-        <aside
-          className={`bg-surface-container-low flex flex-col h-full py-8 px-4 w-64 shadow-xl shrink-0 z-50 fixed inset-y-0 left-0 transition-transform duration-300 lg:relative lg:translate-x-0 ${
-            mobileNavOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          <div className="mb-12 px-2 flex justify-between items-center mt-12 lg:mt-0">
-            <div>
-              <h1 className="font-headline-md text-[24px] font-black text-primary-fixed-dim leading-none">
-                ORION Intel
-              </h1>
-              <p className="font-label-caps text-[10px] mt-2 opacity-60 uppercase tracking-widest text-on-surface">
-                Verified Status: Active
-              </p>
-            </div>
-            <button
-              className="lg:hidden text-white/60"
-              onClick={() => setMobileNavOpen(false)}
-            >
-              <span className="material-symbols-outlined">close</span>
-            </button>
-          </div>
-
-          <nav className="flex-1 space-y-2">
-            <Link
-              href="/"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/10 rounded-xl transition-all"
-            >
-              <span className="material-symbols-outlined">dashboard</span>
-              <span className="font-label-caps text-label-caps text-on-surface">Dashboard</span>
-            </Link>
-            <Link
-              href="/map"
-              className="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-bold translate-x-1 transition-transform"
-            >
-              <span
-                className="material-symbols-outlined"
-                style={{ fontVariationSettings: "'FILL' 1" }}
-              >
-                public
-              </span>
-              <span className="font-label-caps text-label-caps text-on-primary">Risk Intelligence</span>
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all"
-            >
-              <span className="material-symbols-outlined">inventory_2</span>
-              <span className="font-label-caps text-label-caps text-on-surface">Batch Track</span>
-            </Link>
-            <Link
-              href="/assistant"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all"
-            >
-              <span className="material-symbols-outlined">chat_bubble</span>
-              <span className="font-label-caps text-label-caps text-on-surface">Safety Assistant</span>
-            </Link>
-            <Link
-              href="/scanner"
-              className="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-teal-glow rounded-xl transition-all"
-            >
-              <span className="material-symbols-outlined">history</span>
-              <span className="font-label-caps text-label-caps text-on-surface">Scan History</span>
-            </Link>
-          </nav>
-
-          <div className="mt-auto space-y-4">
-            <button className="w-full bg-counterfeit-red/20 text-counterfeit-red border border-counterfeit-red/30 py-3 rounded-xl font-bold font-label-caps text-label-caps flex items-center justify-center gap-2 hover:bg-counterfeit-red/30 transition-all">
-              <span className="material-symbols-outlined text-sm">warning</span>
-              Emergency Alert
-            </button>
-            <div className="pt-4 border-t border-white/5">
-              <Link
-                href="#"
-                className="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-white transition-colors"
-              >
-                <span className="material-symbols-outlined">settings</span>
-                <span className="font-label-caps text-label-caps text-on-surface">Settings</span>
-              </Link>
-              <Link
-                href="#"
-                className="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-white transition-colors"
-              >
-                <span className="material-symbols-outlined">help</span>
-                <span className="font-label-caps text-label-caps text-on-surface">Support</span>
-              </Link>
-            </div>
-          </div>
-        </aside>
-
-        {/* Overlay for mobile */}
-        {mobileNavOpen && (
-          <div
-            className="fixed inset-0 bg-black/20 z-40 lg:hidden"
-            onClick={() => setMobileNavOpen(false)}
-          />
-        )}
+        <Sidebar theme="dark" />
 
         {/* Main Map Interface */}
         <main className="relative flex-1 bg-deep-obsidian overflow-hidden">
-          {/* Map Background */}
-          <div className="absolute inset-0 z-0">
-            <div
-              className="w-full h-full bg-cover bg-center grayscale contrast-125 brightness-[0.3] opacity-40"
-              style={{
-                backgroundImage:
-                  "url('/assets/threat_map.png')",
-              }}
-            ></div>
-            {/* Mock Hotspots */}
-            <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-secondary/20 rounded-full blur-3xl teal-bloom"></div>
-            <div className="absolute top-1/2 left-2/3 w-48 h-48 bg-counterfeit-red/10 rounded-full blur-3xl"></div>
+          {/* Live Pigeon Map Background */}
+          <div className="absolute inset-0 z-0 bg-[#0F172A]">
+            <div className="w-full h-full opacity-90 dark-map-container">
+              <Map 
+                provider={(x, y, z) => {
+                  const limit = Math.pow(2, z);
+                  const wrapX = ((x % limit) + limit) % limit;
+                  if (y < 0 || y >= limit) return ""; // Stop vertical tile loading out of bounds
+                  return `https://cartodb-basemaps-a.global.ssl.fastly.net/dark_all/${z}/${wrapX}/${y}.png`;
+                }}
+                defaultCenter={center} 
+                defaultZoom={zoom}
+                minZoom={2}
+                onBoundsChanged={({ center: newCenter, zoom: newZoom }) => { 
+                  let [lat, lng] = newCenter;
+                  
+                  // Dynamic vertical clamping based on zoom level
+                  // This prevents pulling the world off-screen exposing the background
+                  let maxLat = 85;
+                  if (newZoom <= 2) maxLat = 10;      // Lock mostly to equator when fully zoomed out
+                  else if (newZoom === 3) maxLat = 55; // Restrict poles at medium zoom
+                  else maxLat = 80;                    // Normal freedom at deep zoom
+                  
+                  if (lat > maxLat) lat = maxLat;
+                  if (lat < -maxLat) lat = -maxLat;
+                  
+                  setCenter([lat, lng]); 
+                  setZoom(newZoom); 
+                }}
+              >
+                {geoData?.features.flatMap((feature, i) => {
+                  const [lng, lat] = feature.geometry.coordinates;
+                  const intensity = feature.properties.intensity;
+                  const isHighRisk = intensity >= 0.75;
+                  
+                  // Render each marker across 3 horizontal 'worlds' so they loop laterally seamlessly
+                  return [-360, 0, 360].map((offset) => (
+                    <Overlay 
+                      key={`${i}-${offset}`} 
+                      anchor={[lat, lng + offset]} 
+                      offset={[16, 16]}
+                    >
+                      <div 
+                        onClick={() => setSelectedFeature(feature)}
+                        className={`w-8 h-8 rounded-full flex items-center justify-center shadow-lg transform transition-transform hover:scale-125 cursor-pointer ${isHighRisk ? 'bg-counterfeit-red/90 animate-pulse' : 'bg-suspicious-amber/90'}`}
+                      >
+                        <span className="text-white font-bold text-xs">{feature.properties.flags.length}</span>
+                      </div>
+                    </Overlay>
+                  ));
+                })}
+
+                {/* Selected Feature Overlay (Popup) */}
+                {selectedFeature && (
+                  <Overlay anchor={[selectedFeature.geometry.coordinates[1], selectedFeature.geometry.coordinates[0]]} offset={[150, 200]}>
+                    <div className="w-72 bg-surface-container-high/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 flex flex-col gap-3">
+                      <div className="flex justify-between items-start">
+                        <h3 className="font-bold text-white">Grid Block [ {selectedFeature.geometry.coordinates[1]}, {selectedFeature.geometry.coordinates[0]} ]</h3>
+                        <button onClick={() => setSelectedFeature(null)} className="text-white/50 hover:text-counterfeit-red">
+                          <span className="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                      </div>
+                      
+                      <div className="flex gap-2">
+                        <div className="flex-1 bg-counterfeit-red/10 border border-counterfeit-red/30 p-2 rounded-lg text-center">
+                          <p className="text-[10px] text-counterfeit-red font-bold">FLAGS</p>
+                          <p className="text-xl font-black text-counterfeit-red">{selectedFeature.properties.flags.length}</p>
+                        </div>
+                        <div className="flex-1 bg-primary/10 border border-primary/20 p-2 rounded-lg text-center">
+                          <p className="text-[10px] text-primary font-bold">SCANS</p>
+                          <p className="text-xl font-black text-primary">{selectedFeature.properties.scan_count}</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-2 max-h-40 overflow-y-auto space-y-2 pr-1 scrollbar-hide">
+                        {selectedFeature.properties.flags.map((flag, idx) => (
+                          <div key={idx} className="bg-surface-variant p-2 rounded-md text-xs">
+                            <div className="flex justify-between items-center mb-1">
+                              <span className={`font-bold ${flag.severity === 'CRITICAL' || flag.severity === 'HIGH' ? 'text-counterfeit-red' : 'text-suspicious-amber'}`}>
+                                {flag.type}
+                              </span>
+                              <span className="text-[9px] text-white/40">
+                                {new Date(flag.timestamp).toLocaleTimeString()}
+                              </span>
+                            </div>
+                            <p className="text-white/70 leading-tight">{flag.description}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Overlay>
+                )}
+              </Map>
+            </div>
           </div>
 
           {/* Top Floating Header */}
@@ -204,129 +251,12 @@ export default function RiskIntelligenceMap() {
                 </span>
               </div>
             </div>
-            <div className="flex gap-2 md:gap-4 pointer-events-auto">
-              <div className="glass-card px-3 py-2 md:px-6 md:py-4 rounded-xl md:rounded-2xl">
-                <p className="font-label-caps text-[8px] md:text-[10px] text-white/50 mb-0.5 md:mb-1 uppercase">
-                  Live Scans
-                </p>
-                <p className="font-mono-data text-lg md:text-2xl font-bold text-primary-fixed-dim">
-                  {scanCount.toLocaleString()}
-                </p>
-              </div>
-              <div className="glass-card px-3 py-2 md:px-6 md:py-4 rounded-xl md:rounded-2xl border-l-2 md:border-l-4 border-l-verification-green">
-                <p className="font-label-caps text-[8px] md:text-[10px] text-white/50 mb-0.5 md:mb-1 uppercase">
-                  Neutralized
-                </p>
-                <p className="font-mono-data text-lg md:text-2xl font-bold text-verification-green">
-                  8,210
-                </p>
-              </div>
-            </div>
           </header>
 
           {/* Map Interactive Markers (Floating Intelligence) */}
-          <div className="absolute top-[40%] left-[30%] z-10">
-            <div className="relative">
-              <div className="absolute -inset-4 bg-secondary/30 rounded-full blur-xl map-pulse"></div>
-              <div className="relative glass-card p-3 rounded-lg border-secondary/40">
-                <span
-                  className="material-symbols-outlined text-secondary"
-                  style={{ fontVariationSettings: "'FILL' 1" }}
-                >
-                  location_on
-                </span>
-                <div className="hidden md:block absolute top-0 left-full ml-4 w-48 glass-card p-4 rounded-xl teal-bloom scale-90 origin-left hover:-translate-y-1 transition-transform">
-                  <h4 className="font-bold text-sm text-white">
-                    New Delhi Cluster
-                  </h4>
-                  <p className="text-[11px] text-white/60 mt-1">
-                    Authenticity Delta:{" "}
-                    <span className="text-counterfeit-red">-42%</span>
-                  </p>
-                  <div className="h-1 bg-white/10 rounded-full mt-3 overflow-hidden">
-                    <div className="h-full bg-counterfeit-red w-[85%]"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Replaced by live markers on Pigeon Maps */}
 
-          {/* Right Sidebar: Threat Alerts */}
-          <aside
-            className={`absolute right-0 top-0 bottom-0 w-full lg:w-80 z-40 flex flex-col p-0 lg:p-6 pointer-events-none transition-transform duration-300 ${
-              alertsOpen
-                ? "translate-y-0"
-                : "translate-y-[calc(100%-60px)] lg:translate-y-0"
-            }`}
-            onClick={() => {
-              if (window.innerWidth < 1024) setAlertsOpen(!alertsOpen);
-            }}
-          >
-            <div className="pointer-events-auto flex flex-col h-full bg-surface-container-highest/95 lg:bg-transparent lg:glass-card rounded-t-3xl lg:rounded-3xl overflow-hidden mt-0 lg:mt-20 lg:mb-32 shadow-2xl lg:shadow-none transition-transform">
-              <div className="lg:hidden flex justify-center py-3">
-                <div className="w-12 h-1.5 bg-white/20 rounded-full"></div>
-              </div>
-              <div className="p-4 lg:p-6 border-b border-white/5 flex justify-between items-center">
-                <h3 className="font-label-caps text-white font-bold flex items-center gap-2">
-                  <span className="material-symbols-outlined text-suspicious-amber text-sm">
-                    campaign
-                  </span>
-                  Threat Alerts
-                </h3>
-                <span className="lg:hidden text-[10px] text-white/40 uppercase font-bold">
-                  {alertsOpen ? "Swipe Down" : "Swipe Up"}
-                </span>
-              </div>
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-suspicious-amber/30 transition-all cursor-pointer group hover:-translate-y-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="bg-suspicious-amber/20 text-suspicious-amber px-2 py-0.5 rounded text-[10px] font-bold">
-                      SUSPICIOUS
-                    </span>
-                    <span className="text-[10px] text-white/40">2m ago</span>
-                  </div>
-                  <p className="text-sm font-semibold text-white group-hover:text-primary-fixed-dim transition-colors">
-                    Suspicious Batch B-4022
-                  </p>
-                  <p className="text-xs text-white/50 mt-1">
-                    Detected: New Delhi Regional Terminal. OCR mismatch in
-                    manufacturer seal.
-                  </p>
-                </div>
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-counterfeit-red/30 transition-all cursor-pointer group hover:-translate-y-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="bg-counterfeit-red/20 text-counterfeit-red px-2 py-0.5 rounded text-[10px] font-bold">
-                      COUNTERFEIT
-                    </span>
-                    <span className="text-[10px] text-white/40">14m ago</span>
-                  </div>
-                  <p className="text-sm font-semibold text-white group-hover:text-counterfeit-red transition-colors">
-                    Batch Neutralized: AMZ-90
-                  </p>
-                  <p className="text-xs text-white/50 mt-1">
-                    Location: Lagos, NG. 400 units intercepted at distribution
-                    level.
-                  </p>
-                </div>
-                <div className="p-4 rounded-2xl bg-white/5 border border-white/5 hover:border-verification-green/30 transition-all cursor-pointer group hover:-translate-y-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <span className="bg-verification-green/20 text-verification-green px-2 py-0.5 rounded text-[10px] font-bold">
-                      CLEARED
-                    </span>
-                    <span className="text-[10px] text-white/40">45m ago</span>
-                  </div>
-                  <p className="text-sm font-semibold text-white group-hover:text-verification-green transition-colors">
-                    Shanghai Port Sweep
-                  </p>
-                  <p className="text-xs text-white/50 mt-1">
-                    99.8% verification score on Batch PX-1. High-trust route
-                    established.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </aside>
-
+          {/* Overlays removed per user request to provide a clean map view */}
           {/* Bottom: Community Intelligence Feed */}
           <footer className="absolute bottom-16 lg:bottom-0 left-0 right-0 z-30 p-4 md:p-6 pointer-events-none">
             <div className="pointer-events-auto w-full max-w-4xl mx-auto glass-card rounded-2xl flex items-center p-3 md:p-4 gap-4 md:gap-8 overflow-hidden">
@@ -372,33 +302,6 @@ export default function RiskIntelligenceMap() {
               </button>
             </div>
           </footer>
-
-          {/* Data Tooltip */}
-          <div className="hidden md:block absolute bottom-32 left-8 z-30 w-64 glass-card p-5 rounded-2xl">
-            <p className="font-label-caps text-[10px] text-white/50 mb-3 uppercase">
-              Regional Risk Breakdown
-            </p>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-white/80">APAC</span>
-                <span className="text-xs font-mono-data text-counterfeit-red">
-                  HIGH
-                </span>
-              </div>
-              <div className="h-1 bg-white/5 rounded-full">
-                <div className="h-full bg-counterfeit-red w-[78%]"></div>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-white/80">EMEA</span>
-                <span className="text-xs font-mono-data text-suspicious-amber">
-                  MODERATE
-                </span>
-              </div>
-              <div className="h-1 bg-white/5 rounded-full">
-                <div className="h-full bg-suspicious-amber w-[42%]"></div>
-              </div>
-            </div>
-          </div>
         </main>
       </div>
     </>
