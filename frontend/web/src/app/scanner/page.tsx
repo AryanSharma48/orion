@@ -151,8 +151,10 @@ export default function ScannerWorkspace() {
       formData.append("lat", lat.toString());
       formData.append("lng", lng.toString());
 
-      // Determine API endpoint based on DEMO MODE
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      // Determine API endpoint based on DEMO MODE or Vercel Environment
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || 
+                         (typeof window !== "undefined" && window.location.hostname.includes("vercel.app"));
+                         
       const apiUrl = isDemoMode ? "/api/scan" : "http://localhost:8000/scan";
 
       const res = await fetch(apiUrl, {

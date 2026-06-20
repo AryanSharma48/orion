@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
+    // The frontend scanner/page.tsx appends the file as "image"
+    const file = formData.get("image") as File;
 
     if (!file) {
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+      return NextResponse.json({ error: "No image uploaded" }, { status: 400 });
     }
 
     const buffer = await file.arrayBuffer();

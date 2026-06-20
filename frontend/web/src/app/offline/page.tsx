@@ -15,7 +15,9 @@ export default function OfflineVerifier() {
 
   const generatePayload = async () => {
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || 
+                         process.env.NODE_ENV === "production" || 
+                         (typeof window !== "undefined" && window.location.hostname.includes("vercel.app"));
       const payload = {
         batch_id: "PB-2026-X-991",
         manufacturer_id: "MFG-PHARMA-01",
@@ -71,7 +73,9 @@ export default function OfflineVerifier() {
     setVerifying(true);
     setResult(null);
     try {
-      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || 
+                         process.env.NODE_ENV === "production" || 
+                         (typeof window !== "undefined" && window.location.hostname.includes("vercel.app"));
       if (isDemoMode) {
         // Mock verification logic
         await new Promise(r => setTimeout(r, 800)); // Simulate latency

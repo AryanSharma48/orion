@@ -56,7 +56,8 @@ export default function MapWorkspace() {
     // Fetch real live backend data
     const fetchRiskmap = async () => {
       try {
-        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true" || 
+                           (typeof window !== "undefined" && window.location.hostname.includes("vercel.app"));
         if (isDemoMode) {
           // Mock data for Vercel demo
           const mockData: RiskmapResponse = {
