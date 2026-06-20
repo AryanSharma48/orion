@@ -56,10 +56,42 @@ export default function MapWorkspace() {
     // Fetch real live backend data
     const fetchRiskmap = async () => {
       try {
-        const res = await fetch("http://localhost:8001/riskmap");
-        if (res.ok) {
-          const data: RiskmapResponse = await res.json();
-          setGeoData(data);
+        const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+        if (isDemoMode) {
+          // Mock data for Vercel demo
+          const mockData: RiskmapResponse = {
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                geometry: { type: "Point", coordinates: [77.209, 28.6139] },
+                properties: {
+                  intensity: 0.9,
+                  scan_count: Math.floor(Math.random() * 50) + 10,
+                  flags: [{ id: "1", type: "COUNTERFEIT", description: "Counterfeit Anti-Grinch detected", severity: "CRITICAL", timestamp: new Date().toISOString() }]
+                }
+              },
+              {
+                type: "Feature",
+                geometry: { type: "Point", coordinates: [72.8777, 19.076] },
+                properties: {
+                  intensity: 0.6,
+                  scan_count: Math.floor(Math.random() * 30) + 5,
+                  flags: [{ id: "2", type: "SUSPICIOUS", description: "Suspicious metadata", severity: "MEDIUM", timestamp: new Date().toISOString() }]
+                }
+              }
+            ],
+            generated_at: new Date().toISOString(),
+            total_flags: 2
+          };
+          setGeoData(mockData);
+        } else {
+          // Real backend data
+          const res = await fetch("http://localhost:8001/riskmap");
+          if (res.ok) {
+            const data: RiskmapResponse = await res.json();
+            setGeoData(data);
+          }
         }
       } catch (err) {
         console.error("Failed to fetch riskmap:", err);

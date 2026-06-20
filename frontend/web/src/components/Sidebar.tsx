@@ -52,9 +52,11 @@ export default function Sidebar({ theme = "light" }: { theme?: "light" | "dark" 
       >
         <div className="mb-12 px-2 flex justify-between items-center mt-12 lg:mt-0">
           <div>
-            <h1 className={`font-headline-md text-[24px] font-black leading-none ${titleText}`}>
-              ORION Intel
-            </h1>
+            <Link href="/" className="block hover:opacity-80 transition-opacity">
+              <h1 className={`font-headline-md text-[24px] font-black leading-none ${titleText}`}>
+                ORION Intel
+              </h1>
+            </Link>
             <p className={`font-label-caps text-[10px] mt-2 opacity-60 uppercase tracking-widest ${subText}`}>
               Verified Status: Active
             </p>

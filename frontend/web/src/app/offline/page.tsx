@@ -15,24 +15,35 @@ export default function OfflineVerifier() {
 
   const generatePayload = async () => {
     try {
-      const res = await fetch("http://localhost:8002/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          batch_id: "PB-2026-X-991",
-          manufacturer_id: "MFG-PHARMA-01",
-          product_name: "Metformin 500mg",
-          dosage: "500mg",
-          manufacture_date: "2025-01-01",
-          expiry_date: "2027-01-01",
-          authorized_region: "US-EAST",
-          serial_number: "SN-" + Math.floor(Math.random() * 1000000)
-        })
-      });
-      const data = await res.json();
-      setQrData(data.qr_data);
-      setResult(null);
-      setIsTampered(false);
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      const payload = {
+        batch_id: "PB-2026-X-991",
+        manufacturer_id: "MFG-PHARMA-01",
+        product_name: "Metformin 500mg",
+        dosage: "500mg",
+        manufacture_date: "2025-01-01",
+        expiry_date: "2027-01-01",
+        authorized_region: "US-EAST",
+        serial_number: "SN-" + Math.floor(Math.random() * 1000000)
+      };
+
+      if (isDemoMode) {
+        // Mock the base64 signed payload for Vercel demo
+        const mockQrData = btoa(JSON.stringify({ data: payload, signature: "mock-signature-123" }));
+        setQrData(mockQrData);
+        setResult(null);
+        setIsTampered(false);
+      } else {
+        const res = await fetch("http://localhost:8002/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        setQrData(data.qr_data);
+        setResult(null);
+        setIsTampered(false);
+      }
     } catch (e) {
       console.error(e);
     }
@@ -60,13 +71,28 @@ export default function OfflineVerifier() {
     setVerifying(true);
     setResult(null);
     try {
-      const res = await fetch("http://localhost:8002/verify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ qr_data: dataToVerify })
-      });
-      const data = await res.json();
-      setResult(data);
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      if (isDemoMode) {
+        // Mock verification logic
+        await new Promise(r => setTimeout(r, 800)); // Simulate latency
+        const decoded = atob(dataToVerify);
+        const parsed = JSON.parse(decoded);
+        const isActuallyTampered = parsed.data.expiry_date === "2099-12-31" || !parsed.signature;
+        
+        if (isActuallyTampered) {
+          setResult({ valid: false, failure_reason: "Signature mismatch: Data was altered after signing." });
+        } else {
+          setResult({ valid: true, batch_data: parsed.data, verification_method: "ED25519" });
+        }
+      } else {
+        const res = await fetch("http://localhost:8002/verify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ qr_data: dataToVerify })
+        });
+        const data = await res.json();
+        setResult(data);
+      }
     } catch (e) {
       console.error(e);
       setResult({ valid: false, failure_reason: "Network Error" });

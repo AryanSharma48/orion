@@ -151,8 +151,11 @@ export default function ScannerWorkspace() {
       formData.append("lat", lat.toString());
       formData.append("lng", lng.toString());
 
-      // Send to Python Scanner Service
-      const res = await fetch("http://localhost:8000/scan", {
+      // Determine API endpoint based on DEMO MODE
+      const isDemoMode = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
+      const apiUrl = isDemoMode ? "/api/scan" : "http://localhost:8000/scan";
+
+      const res = await fetch(apiUrl, {
         method: "POST",
         body: formData,
       });
@@ -163,12 +166,20 @@ export default function ScannerWorkspace() {
 
       let data: ScanResponse = await res.json();
 
-      // Ensure the backend OCR actually found text before proceeding
-      if (!data.ocr || !data.ocr.full_text || data.ocr.full_text.trim() === "") {
-        throw new Error("No medicine packaging or readable text detected in the frame. Please try again.");
+      if (isDemoMode) {
+        // In Demo Mode, Gemini directly returns the perfect JSON structure, so we just use it!
+        // We still check if the OCR found anything at all
+        if (!data.ocr || !data.ocr.full_text || data.ocr.full_text.trim() === "") {
+          throw new Error("No medicine packaging or readable text detected in the frame. Please try again.");
+        }
+      } else {
+        // In Local/Real Mode, we use the original mock/calibration logic
+        if (!data.ocr || !data.ocr.full_text || data.ocr.full_text.trim() === "") {
+          throw new Error("No medicine packaging or readable text detected in the frame. Please try again.");
+        }
+        data = calibrateNetworkTelemetry(data, file);
       }
-
-      data = calibrateNetworkTelemetry(data, file);
+      
       setScanResult(data);
     } catch (err: any) {
       console.error(err);
